@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pokedex/static/css/main.be173529.css",
-    "main.js": "/pokedex/static/js/main.820c6a0e.js",
+    "main.js": "/pokedex/static/js/main.c5e5f8c9.js",
     "static/js/453.ac4c0547.chunk.js": "/pokedex/static/js/453.ac4c0547.chunk.js",
     "static/media/pikallora.png": "/pokedex/static/media/pikallora.8829a46184d4fbe0f518.png",
     "static/media/PokemonHollow.ttf": "/pokedex/static/media/PokemonHollow.47f77ce9939c5330492b.ttf",
@@ -9,11 +9,11 @@
     "static/media/pokemonLogo.svg": "/pokedex/static/media/pokemonLogo.bc6b2126de37412fb89a17ef6763c5cd.svg",
     "index.html": "/pokedex/index.html",
     "main.be173529.css.map": "/pokedex/static/css/main.be173529.css.map",
-    "main.820c6a0e.js.map": "/pokedex/static/js/main.820c6a0e.js.map",
+    "main.c5e5f8c9.js.map": "/pokedex/static/js/main.c5e5f8c9.js.map",
     "453.ac4c0547.chunk.js.map": "/pokedex/static/js/453.ac4c0547.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.be173529.css",
-    "static/js/main.820c6a0e.js"
+    "static/js/main.c5e5f8c9.js"
   ]
 }
