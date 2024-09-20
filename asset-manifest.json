@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.7a9cb889.css",
-    "main.js": "/static/js/main.a61bc353.js",
-    "static/js/453.ac4c0547.chunk.js": "/static/js/453.ac4c0547.chunk.js",
-    "static/media/pikallora.png": "/static/media/pikallora.8829a46184d4fbe0f518.png",
-    "static/media/PokemonHollow.ttf": "/static/media/PokemonHollow.47f77ce9939c5330492b.ttf",
-    "static/media/PokemonSolid.ttf": "/static/media/PokemonSolid.5d60be1f7ff5fcc21fc1.ttf",
-    "static/media/pokemonLogo.svg": "/static/media/pokemonLogo.bc6b2126de37412fb89a17ef6763c5cd.svg",
-    "index.html": "/index.html",
-    "main.7a9cb889.css.map": "/static/css/main.7a9cb889.css.map",
-    "main.a61bc353.js.map": "/static/js/main.a61bc353.js.map",
-    "453.ac4c0547.chunk.js.map": "/static/js/453.ac4c0547.chunk.js.map"
+    "main.css": "/pokedex/static/css/main.be173529.css",
+    "main.js": "/pokedex/static/js/main.820c6a0e.js",
+    "static/js/453.ac4c0547.chunk.js": "/pokedex/static/js/453.ac4c0547.chunk.js",
+    "static/media/pikallora.png": "/pokedex/static/media/pikallora.8829a46184d4fbe0f518.png",
+    "static/media/PokemonHollow.ttf": "/pokedex/static/media/PokemonHollow.47f77ce9939c5330492b.ttf",
+    "static/media/PokemonSolid.ttf": "/pokedex/static/media/PokemonSolid.5d60be1f7ff5fcc21fc1.ttf",
+    "static/media/pokemonLogo.svg": "/pokedex/static/media/pokemonLogo.bc6b2126de37412fb89a17ef6763c5cd.svg",
+    "index.html": "/pokedex/index.html",
+    "main.be173529.css.map": "/pokedex/static/css/main.be173529.css.map",
+    "main.820c6a0e.js.map": "/pokedex/static/js/main.820c6a0e.js.map",
+    "453.ac4c0547.chunk.js.map": "/pokedex/static/js/453.ac4c0547.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7a9cb889.css",
-    "static/js/main.a61bc353.js"
+    "static/css/main.be173529.css",
+    "static/js/main.820c6a0e.js"
   ]
 }
