@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../images/pokemonLogo.svg';
 
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,10 +11,9 @@ function NavBar() {
 
   return (
     <nav className="bg-red-600 p-4 flex justify-between items-center font-sans relative">
-
       <Link to="/" className="flex-shrink-0">
         <img
-          src="/pokemonLogo.svg" 
+          src={logo}
           alt="Pokémon Logo"
           className="w-24"
         />
@@ -26,7 +26,7 @@ function NavBar() {
         </button>
       </div>
 
-      {/* Menú movil*/}
+      {/* Menú móvil */}
       {isOpen && (
         <div className="absolute top-full left-0 w-full bg-red-600 shadow-md flex flex-col text-center sm:hidden z-50">
           <Link to="/favorites" className="text-white mx-2 my-2" onClick={toggleMenu}>Favoritos</Link>
