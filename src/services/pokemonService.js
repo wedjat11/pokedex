@@ -1,21 +1,22 @@
+// src/services/pokemonService.js
 import { Pokemon } from '../models/pokemonModel';
+
 export const fetchPokemons = async (page, signal) => {
   const offset = (page - 1) * 20;
 
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`, { signal });
-    
+
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }
 
     const data = await response.json();
-
     const detailedPokemons = await Promise.all(
       data.results.map(async (pokemon) => {
         try {
           const res = await fetch(pokemon.url, { signal });
-          
+
           if (!res.ok) {
             throw new Error(`Error fetching details for ${pokemon.name}: ${res.status}`);
           }
@@ -36,6 +37,7 @@ export const fetchPokemons = async (page, signal) => {
         }
       })
     );
+
     return detailedPokemons.filter(pokemon => pokemon !== null);
   } catch (error) {
     if (error.name === 'AbortError') {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PokemonCard from '../components/pokemonCard';
+import { fetchPokemons } from '../services/pokemonService';
 
 const Home = () => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -15,43 +16,35 @@ const Home = () => {
   }, []);
 
   // Función para cargar Pokémon
-  const loadPokemon = async (pageToLoad) => {
+  const loadPokemon = async (pageToLoad, signal) => {
     setLoading(true);
-    const offset = (pageToLoad - 1) * 20; 
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`);
-    const data = await response.json();
-
-    if (data.results.length === 0) {
+    
+    const detailedPokemons = await fetchPokemons(pageToLoad, signal);
+    
+    if (detailedPokemons.length === 0) {
       setHasMore(false);
-      setLoading(false);
-      return;
+    } else {
+      setPokemonList(prevList => {
+        // Evitar duplicados
+        const newPokemonList = [...prevList, ...detailedPokemons];
+        return Array.from(new Set(newPokemonList.map(pokemon => pokemon.id)))
+          .map(id => newPokemonList.find(pokemon => pokemon.id === id));
+      });
     }
-
-    const detailedPokemonList = await Promise.all(
-      data.results.map(async (pokemon) => {
-        const res = await fetch(pokemon.url);
-        const pokeDetails = await res.json();
-        const types = pokeDetails.types.map(typeInfo => typeInfo.type.name);
-        return {
-          id: pokeDetails.id,
-          name: pokeDetails.name,
-          img: pokeDetails.sprites.front_default,
-          types: types,
-          stats: pokeDetails.stats,
-        };
-      })
-    );
-
-    setPokemonList(prevList => [...prevList, ...detailedPokemonList]);
     setLoading(false);
   };
 
   // Cargar Pokémon al montar el componente
   useEffect(() => {
-    loadPokemon(page);
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    loadPokemon(page, signal);
+
+    return () => controller.abort(); // Cancelar la solicitud si el componente se desmonta
   }, [page]);
 
-  // infinite scroll
+  // Infinite scroll
   useEffect(() => {
     if (hasMore) {
       loadPokemon(page);
@@ -88,11 +81,11 @@ const Home = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {pokemonList.map((pokemon, index) => {
+      {pokemonList.map((pokemon) => {
         const isFavorite = favorites.some(fav => fav.id === pokemon.id);
         return (
           <PokemonCard
-            key={`${pokemon.id}-${index}`}
+            key={pokemon.id}
             pokemon={pokemon}
             addToFavorites={addToFavorites}
             removeFromFavorites={removeFromFavorites}
