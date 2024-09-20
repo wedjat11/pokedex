@@ -17,5 +17,5 @@ Esta es una aplicación web de Pokémon construida con React. Permite a los usua
 
 ## Estructura del Proyecto
 - **Modulos**: El proyecto esta estructurado en modulos para poedr reutilizarse en muchas ocasiones
-- **Servicios**: De igual manera deje un servicio fetch aparte que se puede reutilizar, decidí dejarlo para que lo revisen, es una petición mas robusta
+- **Servicios**: De igual manera separe la petición fetch para poder reutilizarla
 
