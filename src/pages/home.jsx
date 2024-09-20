@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PokemonCard from '../components/pokemonCard';
 
-function Home({ addToFavorites }) {
+function Home({ addToFavorites, removeFromFavorites, favorites }) {
   const [pokemonList, setPokemonList] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,6 @@ function Home({ addToFavorites }) {
           const res = await fetch(pokemon.url);
           const pokeDetails = await res.json();
           const types = pokeDetails.types.map(typeInfo => typeInfo.type.name);
-          console.log("Tipos de Pokémon:", types); 
           return {
             id: pokeDetails.id,
             name: pokeDetails.name,
@@ -59,7 +58,6 @@ function Home({ addToFavorites }) {
       );
 
       setPokemonList((prevList) => [...prevList, ...detailedPokemonList]);
-
       setLoading(false);
     };
 
@@ -69,7 +67,11 @@ function Home({ addToFavorites }) {
   }, [page, hasMore]);
 
   const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50 && !loading && hasMore) {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50 &&
+      !loading &&
+      hasMore
+    ) {
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -81,13 +83,22 @@ function Home({ addToFavorites }) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-    {pokemonList.map((pokemon, index) => (
-      <PokemonCard key={`${pokemon.id}-${index}`} pokemon={pokemon} addToFavorites={addToFavorites} />
-    ))}
-  
-    {loading && <p>Cargando más Pokémon...</p>}
-    {!hasMore && <p>No hay más Pokémon para mostrar.</p>}
-  </div>
+      {pokemonList.map((pokemon, index) => {
+        const isFavorite = favorites.some(fav => fav.id === pokemon.id);
+        return (
+          <PokemonCard
+            key={`${pokemon.id}-${index}`}
+            pokemon={pokemon}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={isFavorite}
+          />
+        );
+      })}
+
+      {loading && <p>Cargando más Pokémon...</p>}
+      {!hasMore && <p>No hay más Pokémon para mostrar.</p>}
+    </div>
   );
 }
 

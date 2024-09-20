@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'PokeLetra'; 
+    src: url('./fonts/PokemonHollow.ttf') format('truetype');
+    font-weight:normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'PokeLetraNegra'; 
+    src: url('./fonts/PokemonSolid.ttf') format('truetype');
+    font-weight:normal;
+    font-style: normal;
+}
+  

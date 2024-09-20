@@ -18,14 +18,22 @@ function App() {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
+  const removeFromFavorites = (pokemonId) => {
+    const updatedFavorites = favorites.filter(pokemon => pokemon.id !== pokemonId);
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  };
+
   return (
-    <Router>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home addToFavorites={addToFavorites} />} />
-        <Route path="/favorites" element={<Favorites />} />
-      </Routes>
-    </Router>
+    <div className="min-h-screen bg-gray-100">
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home addToFavorites={addToFavorites} favorites={favorites} removeFromFavorites={removeFromFavorites} />} />
+          <Route path="/favorites" element={<Favorites favorites={favorites} removeFromFavorites={removeFromFavorites} />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
