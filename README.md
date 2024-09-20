@@ -16,4 +16,6 @@ Esta es una aplicación web de Pokémon construida con React. Permite a los usua
 - **PokeAPI**: API que proporciona información sobre Pokémon.
 
 ## Estructura del Proyecto
+- **Modulos**: El proyecto esta estructurado en modulos para poedr reutilizarse en muchas ocasiones
+- **Servicios**: De igual manera deje un servicio fetch aparte que se puede reutilizar, decidí dejarlo para que lo revisen, es una petición mas robusta
 
