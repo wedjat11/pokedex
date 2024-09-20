@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Router>
+      <Router basename="/pokedex">
         <NavBar />
         <Routes>
           <Route path="/" element={<Home addToFavorites={addToFavorites} favorites={favorites} removeFromFavorites={removeFromFavorites} />} />
