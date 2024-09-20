@@ -1,41 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import PokemonCard from '../components/pokemonCard';
 
-function Home({ addToFavorites, removeFromFavorites, favorites }) {
+const Home = () => {
   const [pokemonList, setPokemonList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [favorites, setFavorites] = useState([]);
+  const [page, setPage] = useState(1); 
+  const [loading, setLoading] = useState(false); 
+  const [hasMore, setHasMore] = useState(true); 
 
-  const typeColors = {
-    fire: 'bg-red-500',
-    water: 'bg-blue-500',
-    grass: 'bg-green-500',
-    electric: 'bg-yellow-500',
-    ice: 'bg-cyan-500',
-    fighting: 'bg-orange-500',
-    poison: 'bg-purple-500',
-    ground: 'bg-yellow-700',
-    flying: 'bg-sky-500',
-    psychic: 'bg-pink-500',
-    bug: 'bg-lime-500',
-    rock: 'bg-stone-500',
-    ghost: 'bg-indigo-500',
-    dragon: 'bg-violet-500',
-    dark: 'bg-gray-800',
-    steel: 'bg-gray-500',
-    fairy: 'bg-pink-300',
+  // Cargar favoritos desde el localStorage 
+  useEffect(() => {
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setFavorites(storedFavorites);
+  }, []);
+
+  // agregar favoritos y actualizar localStorage
+  const addToFavorites = (pokemon) => {
+    const updatedFavorites = [...favorites, pokemon];
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
-  useEffect(() => {
-    const loadPokemons = async () => {
-      setLoading(true);
+  // eliminar  favoritos y actualizar localStorage
+  const removeFromFavorites = (pokemonId) => {
+    const updatedFavorites = favorites.filter(fav => fav.id !== pokemonId);
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  };
 
-      const offset = (page - 1) * 20;
+  // infinite scroll
+  useEffect(() => {
+    const loadMorePokemon = async () => {
+      setLoading(true); 
+
+      const offset = (page - 1) * 20; 
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`);
       const data = await response.json();
 
-      if (!data.results.length) {
+      if (data.results.length === 0) {
         setHasMore(false);
         setLoading(false);
         return;
@@ -49,36 +51,37 @@ function Home({ addToFavorites, removeFromFavorites, favorites }) {
           return {
             id: pokeDetails.id,
             name: pokeDetails.name,
-            img: pokeDetails.sprites.front_shiny || pokeDetails.sprites.front_default,
-            tipo: types,
-            typeColors: types.map(type => typeColors[type] || 'bg-gray-500'),
+            img: pokeDetails.sprites.front_default,
+            types: types,
             stats: pokeDetails.stats,
           };
         })
       );
 
-      setPokemonList((prevList) => [...prevList, ...detailedPokemonList]);
-      setLoading(false);
+      
+      setPokemonList(prevList => [...prevList, ...detailedPokemonList]);
+      setLoading(false); 
     };
 
     if (hasMore) {
-      loadPokemons();
+      loadMorePokemon();
     }
   }, [page, hasMore]);
 
+  
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50 &&
       !loading &&
       hasMore
     ) {
-      setPage((prevPage) => prevPage + 1);
+      setPage(prevPage => prevPage + 1); 
     }
   };
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll); // Limpiar evento de scroll al desmontar
   }, [loading, hasMore]);
 
   return (
@@ -91,15 +94,16 @@ function Home({ addToFavorites, removeFromFavorites, favorites }) {
             pokemon={pokemon}
             addToFavorites={addToFavorites}
             removeFromFavorites={removeFromFavorites}
-            isFavorite={isFavorite}
+            isFavorite={isFavorite} 
           />
         );
       })}
-
+      
+      
       {loading && <p>Cargando más Pokémon...</p>}
       {!hasMore && <p>No hay más Pokémon para mostrar.</p>}
     </div>
   );
-}
+};
 
 export default Home;

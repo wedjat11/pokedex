@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; 
+import PokemonType from './pokemonType';
+import PokemonStats from './pokemonStats';
 
-function PokemonCard({ pokemon, addToFavorites, removeFromFavorites, isFavorite }) {
+const PokemonCard = ({ pokemon, addToFavorites, removeFromFavorites, isFavorite }) => {
   const [favorite, setFavorite] = useState(isFavorite);
 
   useEffect(() => {
-    setFavorite(isFavorite); 
+    setFavorite(isFavorite);
   }, [isFavorite]);
 
   const handleFavoriteClick = () => {
@@ -13,66 +15,44 @@ function PokemonCard({ pokemon, addToFavorites, removeFromFavorites, isFavorite 
     } else {
       addToFavorites(pokemon);
     }
-    setFavorite(!favorite);
+    setFavorite(!favorite); 
   };
 
-  const statsColors = {
-    hp: 'bg-green-300',
-    attack: 'bg-red-400',
-    defense: 'bg-yellow-400',
-    speed: 'bg-orange-400',
-    'special-attack': 'bg-blue-400',
-    'special-defense': 'bg-purple-400',
+  const typeColors = {
+    fire: 'bg-red-500',
+    water: 'bg-blue-500',
+    grass: 'bg-green-500',
+    electric: 'bg-yellow-500',
+    ice: 'bg-cyan-500',
+    fighting: 'bg-orange-500',
+    poison: 'bg-purple-500',
+    ground: 'bg-yellow-700',
+    flying: 'bg-sky-500',
+    psychic: 'bg-pink-500',
+    bug: 'bg-lime-500',
+    rock: 'bg-stone-500',
+    ghost: 'bg-indigo-500',
+    dragon: 'bg-violet-500',
+    dark: 'bg-gray-800',
+    steel: 'bg-gray-500',
+    fairy: 'bg-pink-300',
   };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-5 w-full max-w-sm mx-auto relative">
-      {/* ID y Nombre */}
       <div className="text-gray-500 text-sm mb-2">#{String(pokemon.id).padStart(3, '0')}</div>
-      <h2 className="text-2xl font-bold text-black mb-2 ">{pokemon.name}</h2>
-
-      {/* Estrella de Favoritos */}
+      <h2 className="text-2xl font-bold text-black mb-2">{pokemon.name}</h2>
       <div
         className={`absolute top-2 right-2 cursor-pointer text-2xl ${favorite ? 'text-yellow-400' : 'text-gray-400'}`}
         onClick={handleFavoriteClick}
       >
         ★
       </div>
-
-      {/* Tipos de Pokémon */}
-      <div className="flex space-x-2 mb-4">
-        {Array.isArray(pokemon.tipo) &&
-          pokemon.tipo.map((type) => (
-            <span
-              key={type}
-              className={`px-2 py-0.5 rounded-full text-white ${pokemon.typeColors[pokemon.tipo.indexOf(type)]} font-semibold text-sm`} // Ajustes aquí
-            >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </span>
-          ))}
-      </div>
-
-      {/* Imagen del Pokémon */}
+      <PokemonType types={pokemon.types || []} typeColors={typeColors} />
       <img src={pokemon.img} alt={pokemon.name} className="w-32 h-32 object-contain mx-auto mb-4" />
-
-      {/* Estadísticas */}
-      <div className="mb-4">
-        {Array.isArray(pokemon.stats) &&
-          pokemon.stats.slice(0, 4).map((stat) => {
-            const statPercentage = (stat.base_stat / 255) * 100;
-            return (
-              <div key={stat.stat.name} className="flex items-center mb-1">
-                <span className="w-20 text-gray-700 capitalize">{stat.stat.name}</span>
-                <div className="w-full bg-gray-200 rounded-full h-2 mx-2">
-                  <div className={`h-2 rounded-full ${statsColors[stat.stat.name]}`} style={{ width: `${statPercentage}%` }}></div>
-                </div>
-                <span className="w-10 text-right">{stat.base_stat}</span>
-              </div>
-            );
-          })}
-      </div>
+      <PokemonStats stats={pokemon.stats} />
     </div>
   );
-}
+};
 
 export default PokemonCard;
