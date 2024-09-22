@@ -1,22 +1,12 @@
-import { useEffect, useState } from 'react';
 import NoFavorites from '../components/noFav';
+import useFavorites from '../utils/useFavorites';
 
 function Favorites() {
-  const [favorites, setFavorites] = useState([]);
-
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    setFavorites(storedFavorites);
-  }, []);
-
-  const removeFromFavorites = (pokemonToRemove) => {
-    const newFavorites = favorites.filter((pokemon) => pokemon.id !== pokemonToRemove.id);
-    setFavorites(newFavorites);
-    localStorage.setItem('favorites', JSON.stringify(newFavorites));
-  };
+  const { favorites, removeFromFavorites } = useFavorites();
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="min-h-screen p-4">
+      <h1 className="text-3xl font-bold text-center mb-8">Favoritos</h1>
       {favorites.length === 0 ? (
         <NoFavorites />
       ) : (
