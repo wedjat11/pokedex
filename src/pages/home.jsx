@@ -1,70 +1,23 @@
 import { useState, useEffect } from 'react';
 import PokemonCard from '../components/pokemonCard';
-import { fetchPokemons } from '../services/pokemonService';
+import useInfiniteScroll from '../utils/useInfiniteScroll';
+import usePokemonLoader from '../utils/usePokemonLoader';
 
 const Home = () => {
-  const [pokemonList, setPokemonList] = useState([]);
   const [favorites, setFavorites] = useState([]);
+
+  // Hook para manejar la paginación y carga de Pokémon
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const { pokemonList, loading, hasMore } = usePokemonLoader(page);
+
+  // Hook para el scroll infinito
+  useInfiniteScroll(() => setPage(prevPage => prevPage + 1), loading, hasMore);
 
   // Cargar favoritos desde el localStorage 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     setFavorites(storedFavorites);
   }, []);
-
-  // Función para cargar Pokémon
-  const loadPokemon = async (pageToLoad, signal) => {
-    setLoading(true);
-    
-    const detailedPokemons = await fetchPokemons(pageToLoad, signal);
-    
-    if (detailedPokemons.length === 0) {
-      setHasMore(false);
-    } else {
-      setPokemonList(prevList => {
-        // Evitar duplicados
-        const newPokemonList = [...prevList, ...detailedPokemons];
-        return Array.from(new Set(newPokemonList.map(pokemon => pokemon.id)))
-          .map(id => newPokemonList.find(pokemon => pokemon.id === id));
-      });
-    }
-    setLoading(false);
-  };
-
-  // Cargar Pokémon al montar el componente
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    loadPokemon(page, signal);
-
-    return () => controller.abort(); // Cancelar la solicitud si el componente se desmonta
-  }, [page]);
-
-  // Infinite scroll
-  useEffect(() => {
-    if (hasMore) {
-      loadPokemon(page);
-    }
-  }, [page, hasMore]);
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50 &&
-      !loading &&
-      hasMore
-    ) {
-      setPage(prevPage => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [loading, hasMore]);
 
   // Funciones para manejar favoritos
   const addToFavorites = (pokemon) => {
